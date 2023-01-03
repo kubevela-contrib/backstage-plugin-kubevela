@@ -8,14 +8,36 @@ This plugin will connect to Kubernetes API and request vela applications, it pro
 
 As a result, you just need to follow the [Creating an Entity Provider](https://backstage.io/docs/features/software-catalog/external-integrations#creating-an-entity-provider) guide on the backstage side to use the plugin as an endpoint.
 
+# Install and Run
+
+## Run as Docker Image
+
+If you want to run it locally with the docker image, you need kubeconfig in your environment.
+
+```shel
+docker run -p 8080:8080 --rm -it -v ~/.kube:/root/.kube  oamdev/backstage-plugin-kubevela
+```
+
+## Run as Vela Addon
+
+```shell
+vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
+vela addon enable backstage
+```
+
+If you want to test it locally, you can run the port-forward command and choose `backstage-plugin-vela` component:
+
+```shell
+vela port-forward addon-backstage -n vela-system
+```
 
 # TODO
 
 ## Installation
 
-- [ ] Add Dockerfile
+- [x] Add Dockerfile
+- [x] Make it as KubeVela Addon
 - [ ] An end to end guide or demo about how it works
-- [ ] Make it as KubeVela Addon
 
 ## More Integration
 
