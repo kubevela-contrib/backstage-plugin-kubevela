@@ -40,14 +40,27 @@ func entitySyncer(w http.ResponseWriter, r *http.Request) {
 	}
 	var res []Entity
 	for _, app := range appList.Items {
-
-		managedBy := app.Annotations[managedByLocation]
-		if managedBy == "" {
-			managedBy = "k8s:vela:application:" + app.Namespace + ":" + app.Name
+		ann := app.Annotations
+		if ann == nil {
+			ann = map[string]string{}
 		}
-		managedByOrigin := app.Annotations[managedByOriginLocation]
-		if managedByOrigin == "" {
-			managedByOrigin = managedBy
+		if ann[managedByLocation] == "" {
+			ann[managedByLocation] = "oam-app:" + app.Namespace + ":" + app.Name
+		}
+		if ann[managedByOriginLocation] == "" {
+			ann[managedByOriginLocation] = ann[managedByLocation]
+		}
+		lifecycle := app.Annotations[AnnLifecycle]
+		if lifecycle == "" {
+			lifecycle = "default"
+		}
+		owner := app.Annotations[AnnOwner]
+		if owner == "" {
+			owner = "kubevela"
+		}
+		system := app.Annotations[AnnSystem]
+		if system == "" {
+			system = app.Namespace
 		}
 
 		res = append(res, Entity{
@@ -56,19 +69,21 @@ func entitySyncer(w http.ResponseWriter, r *http.Request) {
 			Metadata: &EntityMeta{
 				Name:      app.Name,
 				Namespace: app.Namespace,
-				Tags:      []string{"vela-app"},
-				Annotations: map[string]string{
-					managedByLocation:       managedBy,
-					managedByOriginLocation: managedByOrigin,
-				},
+
+				Tags:        []string{"vela-app"},
+				Description: ann[AnnDescription],
+				Title:       ann[AnnTitle],
+
+				Annotations: ann,
+				Labels:      app.Labels,
+
+				//TODO: handle links
 			},
 			Spec: map[string]interface{}{
-				"type": "vela-application",
-
-				// TODO: these following items should read from apps.
-				"lifecycle": "production",
-				"owner":     "vela-users",
-				"system":    "vela-apps",
+				"type":      "oam-app",
+				"lifecycle": lifecycle,
+				"owner":     owner,
+				"system":    system,
 			},
 		})
 	}

@@ -31,13 +31,30 @@ If you want to test it locally, you can run the port-forward command and choose 
 vela port-forward addon-backstage -n vela-system
 ```
 
-# TODO
+# Develop
+
+* Local Run
+```shell
+go run .
+```
+
+# Well Known Annotations
+
+KubeVela will sync with the backstage [Well-known Annotations](https://backstage.io/docs/features/software-catalog/well-known-annotations), besides that,
+KubeVela adds some more annotations that can help sync data from vela application to backstage spec.
+
+| Annotations                           |               Usage        |
+| :------------------------------------: | :---------------------------------------:|
+| `app.oam.dev/lifecycle`         |    lifecycle of backstage catalog       |
+
+
+# Work Progress
 
 ## Installation
 
 - [x] Add Dockerfile
 - [x] Make it as KubeVela Addon
-- [ ] An end to end guide or demo about how it works
+- [x] An [end to end guide]() or demo about how it works
 
 ## More Integration
 
