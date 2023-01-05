@@ -46,12 +46,7 @@ func SyncEntity(w http.ResponseWriter, r *http.Request) {
 		if ann == nil {
 			ann = map[string]string{}
 		}
-		if ann[managedByLocation] == "" {
-			ann[managedByLocation] = "vela-app:" + app.Namespace + ":" + app.Name
-		}
-		if ann[managedByOriginLocation] == "" {
-			ann[managedByOriginLocation] = ann[managedByLocation]
-		}
+
 		if ann[AnnOwner] == "" {
 			ann[AnnOwner] = "kubevela"
 		}
@@ -61,7 +56,6 @@ func SyncEntity(w http.ResponseWriter, r *http.Request) {
 		res = append(res, ConvertBackstageSystem(ann, app))
 
 		for _, comp := range app.Spec.Components {
-
 			res = append(res, ConvertBackstageComponent(ann, app, comp))
 		}
 	}
@@ -71,6 +65,16 @@ func SyncEntity(w http.ResponseWriter, r *http.Request) {
 	}
 	_, err = w.Write(j)
 	return
+}
+
+func fillNecessaryAnnotation(ann map[string]string, app v1beta1.Application) map[string]string {
+	if ann[managedByLocation] == "" {
+		ann[managedByLocation] = "vela-app:" + app.Namespace + ":" + app.Name
+	}
+	if ann[managedByOriginLocation] == "" {
+		ann[managedByOriginLocation] = ann[managedByLocation]
+	}
+	return ann
 }
 
 func getTagsFromAnn(ann map[string]string) []string {
@@ -100,7 +104,7 @@ func ConvertBackstageSystem(ann map[string]string, app v1beta1.Application) Enti
 			Description: ann[AnnDescription],
 			Title:       ann[AnnTitle],
 
-			Annotations: ann,
+			Annotations: fillNecessaryAnnotation(ann, app),
 			Labels:      app.Labels,
 
 			//TODO: handle links for system
@@ -140,7 +144,7 @@ func ConvertBackstageComponent(appAnn map[string]string, app v1beta1.Application
 		bt.Owner = appAnn[AnnOwner]
 	}
 	if len(bt.Annotations) == 0 {
-		bt.Annotations = app.Annotations
+		bt.Annotations = appAnn
 	}
 	if len(bt.Labels) == 0 {
 		bt.Labels = app.Labels
@@ -169,7 +173,7 @@ func ConvertBackstageComponent(appAnn map[string]string, app v1beta1.Application
 			Description: bt.Description,
 			Title:       bt.Title,
 
-			Annotations: bt.Annotations,
+			Annotations: fillNecessaryAnnotation(bt.Annotations, app),
 			Labels:      bt.Labels,
 			Links:       bt.Links,
 		},

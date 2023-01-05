@@ -38,5 +38,4 @@ spec:
             links:
               - url: "https://kubevela.net/"
                 title: "vela-doc"
-                icon: "https://kubevela.net/img/logo.svg"
                 type: "docs"
