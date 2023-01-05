@@ -10,7 +10,9 @@ As a result, you just need to follow the [Creating an Entity Provider](https://b
 
 # Install and Run
 
-## Run as Docker Image
+## Installation
+
+### Run as Docker Image
 
 If you want to run it locally with the docker image, you need kubeconfig in your environment.
 
@@ -18,7 +20,7 @@ If you want to run it locally with the docker image, you need kubeconfig in your
 docker run -p 8080:8080 --rm -it -v ~/.kube:/root/.kube  oamdev/backstage-plugin-kubevela
 ```
 
-## Run as Vela Addon
+### Run as Vela Addon
 
 ```shell
 vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
@@ -31,34 +33,35 @@ If you want to test it locally, you can run the port-forward command and choose 
 vela port-forward addon-backstage -n vela-system
 ```
 
-# Develop
+## Develop
 
 * Local Run
 ```shell
 go run .
 ```
 
-# Well Known Annotations
+## System Model Integration
+
+* A vela application will convert to a backstage system.
+* Resources created by vela component, will convert to backstage components.
+* Resources can be marked by annotations to represent more backstage information as the [Well Known Annotations](#Well-Known-Annotations) section described.  
+
+## Well Known Annotations
 
 KubeVela will sync with the backstage [Well-known Annotations](https://backstage.io/docs/features/software-catalog/well-known-annotations), besides that,
 KubeVela adds some more annotations that can help sync data from vela application to backstage spec.
 
 | Annotations                           |               Usage        |
 | :------------------------------------: | :---------------------------------------:|
-| `app.oam.dev/lifecycle`         |    lifecycle of backstage catalog       |
+|    `backstage.oam.dev/owner`        |  Owner of the app synced to backstage |
+|    `backstage.oam.dev/domain`        | Domain of the app synced to backstage  |
+|    `backstage.oam.dev/description`        |    Description of the app synced to backstage | 
+|    `backstage.oam.dev/title`        |   Title of the app synced to backstage |
+|    `backstage.oam.dev/tags`        |   Tags of the app synced to backstage, split by `,`  |
 
-
-# Work Progress
-
-## Installation
-
-- [x] Add Dockerfile
-- [x] Make it as KubeVela Addon
-- [x] An [end to end guide]() or demo about how it works
+The annotations and labels of vela application will be automatically injected on syncing, while vela component need a backstage trait for this, check the [example app](./examples/app.yaml) for details.
 
 ## More Integration
 
-- [ ] Follow [the system model](https://backstage.io/docs/features/software-catalog/system-model) of backstage to integrate with KubeVela
-- [ ] Enrich the synced data with [Well-known Annotations](https://backstage.io/docs/features/software-catalog/well-known-annotations)
 - [ ] Add [Well-known Relations between Catalog Entities](https://backstage.io/docs/features/software-catalog/well-known-relations)
 - [ ] Add [Kind API](https://backstage.io/docs/features/software-catalog/descriptor-format#kind-api) to integrate with backstage API

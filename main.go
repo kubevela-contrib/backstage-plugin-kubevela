@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", entitySyncer)
+	http.HandleFunc("/", SyncEntity)
 	var err error
 	k8sClient, err = client.New(ctrl.GetConfigOrDie(), client.Options{Scheme: scheme})
 	if err != nil {

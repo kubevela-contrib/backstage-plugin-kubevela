@@ -9,6 +9,18 @@ type Entity struct {
 	Relations  []EntityRelation       `json:"relations,omitempty"`
 }
 
+type VelaBackstageTrait struct {
+	TypeAlias   string            `json:"typeAlias,omitempty"`
+	LifeCycle   string            `json:"lifecycle,omitempty"`
+	Owner       string            `json:"owner,omitempty"`
+	Description string            `json:"description,omitempty"`
+	Title       string            `json:"title,omitempty"`
+	Tags        []string          `json:"tags,omitempty"`
+	Annotations map[string]string `json:"annotations,omitempty"`
+	Labels      map[string]string `json:"labels,omitempty"`
+	Links       []EntityLink      `json:"links,omitempty"`
+}
+
 type EntityMeta struct {
 	/**
 	 * A globally unique ID for the entity.
@@ -99,4 +111,12 @@ type EntityLink struct {
 }
 
 type EntityRelation struct {
+	/**
+	 * The type of the relation.
+	 */
+	Type string `json:"type"`
+	/**
+	 * The entity ref of the target of this relation.
+	 */
+	TargetRef string `json:"targetRef"`
 }
