@@ -92,7 +92,7 @@ func getTagsFromAnn(ann map[string]string) []string {
 // ConvertBackstageSystem will handle OAM Application as Backstage System
 func ConvertBackstageSystem(ann map[string]string, app v1beta1.Application) Entity {
 	tags := getTagsFromAnn(ann)
-	tags = append(tags, "vela-app")
+	tags = append(tags, "vela-app", app.Namespace)
 	return Entity{
 		ApiVersion: "backstage.io/v1alpha1",
 		Kind:       "System",
@@ -152,7 +152,7 @@ func ConvertBackstageComponent(appAnn map[string]string, app v1beta1.Application
 	if len(bt.Tags) == 0 {
 		bt.Tags = getTagsFromAnn(appAnn)
 	}
-	tags := append(bt.Tags, "vela-component")
+	tags := append(bt.Tags, "vela-component", app.Namespace)
 	relations := []EntityRelation{}
 	for _, dep := range comp.DependsOn {
 		relations = append(relations, EntityRelation{
