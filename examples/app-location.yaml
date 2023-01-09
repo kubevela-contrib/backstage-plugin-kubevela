@@ -20,7 +20,7 @@ spec:
       traits:
         - type: backstage-location
           properties:
-            type: file
+            type: url
             targets:
               - "https://raw.githubusercontent.com/kubevela-contrib/backstage-plugin-kubevela/main/examples/backstage-group.yaml"
               - "https://raw.githubusercontent.com/kubevela-contrib/backstage-plugin-kubevela/main/examples/backstage-user.yaml"
