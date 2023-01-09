@@ -1,0 +1,7 @@
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: vela-backstage-demo
+  description: Everything about artists
+spec:
+  owner: vela-maintainers

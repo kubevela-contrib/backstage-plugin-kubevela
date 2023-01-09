@@ -13,6 +13,11 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+const (
+	BackstageComponent = "backstage-component"
+	BackstageLocation  = "backstage-location"
+)
+
 func SyncEntity(w http.ResponseWriter, r *http.Request) {
 	var err error
 
@@ -57,6 +62,10 @@ func SyncEntity(w http.ResponseWriter, r *http.Request) {
 
 		for _, comp := range app.Spec.Components {
 			res = append(res, ConvertBackstageComponent(ann, app, comp))
+			l := ConvertBackstageLocation(app, comp)
+			if l.Kind != "" {
+				res = append(res, l)
+			}
 		}
 	}
 	j, err := json.Marshal(res)
@@ -116,26 +125,12 @@ func ConvertBackstageSystem(ann map[string]string, app v1beta1.Application) Enti
 	}
 }
 
-// ConvertBackstageComponent will handle OAM Application Component as Backstage Component
-func ConvertBackstageComponent(appAnn map[string]string, app v1beta1.Application, comp common.ApplicationComponent) Entity {
-	var bt VelaBackstageTrait
-	for _, tr := range comp.Traits {
-		if tr.Type == "backstage" {
-			data, err := json.Marshal(tr.Properties)
-			if err != nil {
-				log.Println("marshal backstage trait failed", err)
-				break
-			}
-			err = json.Unmarshal(data, &bt)
-			if err != nil {
-				log.Println("unmarshal backstage trait failed", err)
-				break
-			}
-			break
-		}
+func fillDefaultSpec(bt *VelaBackstageTrait, appAnn map[string]string, app v1beta1.Application, comp common.ApplicationComponent) {
+	if bt.System == "" {
+		bt.System = app.Name
 	}
-	if bt.TypeAlias == "" {
-		bt.TypeAlias = comp.Type
+	if bt.Type == "" {
+		bt.Type = comp.Type
 	}
 	if bt.LifeCycle == "" {
 		bt.LifeCycle = "default"
@@ -152,6 +147,27 @@ func ConvertBackstageComponent(appAnn map[string]string, app v1beta1.Application
 	if len(bt.Tags) == 0 {
 		bt.Tags = getTagsFromAnn(appAnn)
 	}
+}
+
+// ConvertBackstageComponent will handle OAM Application Component as Backstage Component
+func ConvertBackstageComponent(appAnn map[string]string, app v1beta1.Application, comp common.ApplicationComponent) Entity {
+	var bt VelaBackstageTrait
+	for _, tr := range comp.Traits {
+		if tr.Type == "backstage" || tr.Type == BackstageComponent {
+			data, err := json.Marshal(tr.Properties)
+			if err != nil {
+				log.Println("marshal backstage trait failed", err)
+				break
+			}
+			err = json.Unmarshal(data, &bt)
+			if err != nil {
+				log.Println("unmarshal backstage trait failed", err)
+				break
+			}
+			break
+		}
+	}
+	fillDefaultSpec(&bt, appAnn, app, comp)
 	tags := append(bt.Tags, "vela-component", app.Namespace)
 	relations := []EntityRelation{}
 	for _, dep := range comp.DependsOn {
@@ -178,10 +194,51 @@ func ConvertBackstageComponent(appAnn map[string]string, app v1beta1.Application
 			Links:       bt.Links,
 		},
 		Spec: map[string]interface{}{
-			"type":      bt.TypeAlias,
+			"type":      bt.Type,
 			"lifecycle": bt.LifeCycle,
 			"owner":     bt.Owner,
-			"system":    app.Name,
+			"system":    bt.System,
+		},
+	}
+}
+
+// ConvertBackstageLocation will handle OAM Trait as Backstage Location Entity
+func ConvertBackstageLocation(app v1beta1.Application, comp common.ApplicationComponent) Entity {
+	var bt VelaBackstageTrait
+	var found bool
+	for _, tr := range comp.Traits {
+		if tr.Type == BackstageLocation {
+			data, err := json.Marshal(tr.Properties)
+			if err != nil {
+				log.Println("marshal backstage trait failed", err)
+				break
+			}
+			err = json.Unmarshal(data, &bt)
+			if err != nil {
+				log.Println("unmarshal backstage trait failed", err)
+				break
+			}
+			found = true
+			break
+		}
+	}
+	if !found {
+		return Entity{}
+	}
+	if bt.Annotations == nil {
+		bt.Annotations = map[string]string{}
+	}
+	return Entity{
+		ApiVersion: "backstage.io/v1alpha1",
+		Kind:       "Location",
+		Metadata: &EntityMeta{
+			Name:        comp.Name,
+			Namespace:   app.Namespace,
+			Annotations: fillNecessaryAnnotation(bt.Annotations, app),
+		},
+		Spec: map[string]interface{}{
+			"type":    bt.Type,
+			"targets": bt.Targets,
 		},
 	}
 }

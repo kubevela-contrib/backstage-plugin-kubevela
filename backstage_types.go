@@ -10,15 +10,17 @@ type Entity struct {
 }
 
 type VelaBackstageTrait struct {
-	TypeAlias   string            `json:"typeAlias,omitempty"`
+	Type        string            `json:"type,omitempty"`
 	LifeCycle   string            `json:"lifecycle,omitempty"`
 	Owner       string            `json:"owner,omitempty"`
+	System      string            `json:"system,omitempty"`
 	Description string            `json:"description,omitempty"`
 	Title       string            `json:"title,omitempty"`
 	Tags        []string          `json:"tags,omitempty"`
 	Annotations map[string]string `json:"annotations,omitempty"`
 	Labels      map[string]string `json:"labels,omitempty"`
 	Links       []EntityLink      `json:"links,omitempty"`
+	Targets     []string          `json:"targets,omitempty"`
 }
 
 type EntityMeta struct {

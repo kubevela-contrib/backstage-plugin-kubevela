@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: wonderflow
+spec:
+  profile:
+    displayName: Jianbo Sun
+    email: wonderflow.sun@gmail.com
+    picture: https://avatars.githubusercontent.com/u/2173670?v=4
+  memberOf: [vela-maintainers]
