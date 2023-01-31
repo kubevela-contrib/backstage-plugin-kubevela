@@ -26,7 +26,7 @@ docker run -p 8080:8080 --rm -it -v ~/.kube:/root/.kube  oamdev/backstage-plugin
 
 ```shell
 vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
-vela addon enable backstage
+vela addon enable 1
 ```
 
 If you want to test it locally, you can run the port-forward command and choose `backstage-plugin-vela` component:

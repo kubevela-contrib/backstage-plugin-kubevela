@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: somefive
+spec:
+  profile:
+    displayName: Da Yin
+    email: Somefive@foxmail.com
+    picture: https://avatars.githubusercontent.com/u/14019297?v=4
+  memberOf: [vela-maintainers]

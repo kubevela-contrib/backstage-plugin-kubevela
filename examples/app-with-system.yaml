@@ -13,3 +13,9 @@ spec:
         ports:
           - port: 8000
             expose: true
+      traits:
+        - type: backstage-location
+          properties:
+            type: url
+            targets:
+              - "https://raw.githubusercontent.com/kubevela-contrib/backstage-plugin-kubevela/main/examples/backstage-user2.yaml"
