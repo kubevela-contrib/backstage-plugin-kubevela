@@ -58,7 +58,10 @@ func SyncEntity(w http.ResponseWriter, r *http.Request) {
 		if ann[AnnDomain] == "" {
 			ann[AnnDomain] = "kubevela"
 		}
-		res = append(res, ConvertBackstageSystem(ann, app))
+		if ann[AnnSystem] == "" {
+			ann[AnnSystem] = app.Name
+			res = append(res, ConvertBackstageSystem(ann, app))
+		}
 
 		for _, comp := range app.Spec.Components {
 			res = append(res, ConvertBackstageComponent(ann, app, comp))
@@ -127,7 +130,7 @@ func ConvertBackstageSystem(ann map[string]string, app v1beta1.Application) Enti
 
 func fillDefaultSpec(bt *VelaBackstageTrait, appAnn map[string]string, app v1beta1.Application, comp common.ApplicationComponent) {
 	if bt.System == "" {
-		bt.System = app.Name
+		bt.System = appAnn[AnnSystem]
 	}
 	if bt.Type == "" {
 		bt.Type = comp.Type

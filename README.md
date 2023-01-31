@@ -55,6 +55,7 @@ KubeVela adds some more annotations that can help sync data from vela applicatio
 | :------------------------------------: | :---------------------------------------:|
 |    `backstage.oam.dev/owner`        |  Owner of the app synced to backstage |
 |    `backstage.oam.dev/domain`        | Domain of the app synced to backstage  |
+|    `backstage.oam.dev/system`        | System of the app synced to backstage, by default its the name of application  |
 |    `backstage.oam.dev/description`        |    Description of the app synced to backstage | 
 |    `backstage.oam.dev/title`        |   Title of the app synced to backstage |
 |    `backstage.oam.dev/tags`        |   Tags of the app synced to backstage, split by `,`  |

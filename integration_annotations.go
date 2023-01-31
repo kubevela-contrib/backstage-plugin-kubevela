@@ -8,6 +8,7 @@ const (
 const (
 	AnnOwner  = "backstage.oam.dev/owner"
 	AnnDomain = "backstage.oam.dev/domain"
+	AnnSystem = "backstage.oam.dev/system"
 
 	AnnDescription = "backstage.oam.dev/description"
 	AnnTitle       = "backstage.oam.dev/title"
