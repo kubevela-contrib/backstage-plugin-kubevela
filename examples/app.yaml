@@ -22,8 +22,8 @@ spec:
           properties:
             type: website
             lifecycle: production
-            owner: wonderflow
-            description: "This is the hello world app."
+            owner: user:wonderflow
+            description: "This is the first hello world app."
             title: "Hello World"
             tags:
               - "hello-world"

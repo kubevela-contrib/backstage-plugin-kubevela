@@ -10,7 +10,7 @@ metadata:
     backstage.oam.dev/tags: "backstage-location-demo, vela"
 spec:
   components:
-    - name: express-server-2
+    - name: express-server-location
       type: webservice
       properties:
         image: oamdev/hello-world
