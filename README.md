@@ -8,6 +8,8 @@ This plugin will connect to Kubernetes API and request vela applications, it pro
 
 As a result, you just need to follow the [Creating an Entity Provider](https://backstage.io/docs/features/software-catalog/external-integrations#creating-an-entity-provider) guide on the backstage side to use the plugin as an endpoint.
 
+![back-stage-arch](./images/backstage-plugin-arch.jpg)
+
 # Install and Run
 
 ## Installation
