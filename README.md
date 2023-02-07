@@ -51,7 +51,7 @@ A pre-configured reference backstage instance: [wonderflow/vela-backstage-demo](
 
 If you want to run it locally with the docker image, you need kubeconfig in your environment.
 
-```shel
+```shell
 docker run -p 8080:8080 --rm -it -v ~/.kube:/root/.kube  oamdev/backstage-plugin-kubevela
 ```
 
@@ -59,7 +59,7 @@ docker run -p 8080:8080 --rm -it -v ~/.kube:/root/.kube  oamdev/backstage-plugin
 
 ```shell
 vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
-vela addon enable backstage-plugin-vela
+vela addon enable backstage
 ```
 
 If you want to test it locally, you can run the port-forward command and choose `backstage-plugin-vela` component:
