@@ -1,12 +1,45 @@
 # backstage-plugin-kubevela
 
-It's a plugin of backstage that can make kubevela application work as backstage services.
+It's a plugin of backstage that can make kubevela application work as backstage services. A [frontend plugin](./frontend/velaux/README.md) that adds a VelaUX page is also provided.
 
 It leverages the [External integrations](https://backstage.io/docs/features/software-catalog/external-integrations) and works as a `Custom Entity Providers`.
 
 This plugin will connect to Kubernetes API and request vela applications, it provides an API endpoint for serving entities for backstage app.
 
 As a result, you just need to follow the [Creating an Entity Provider](https://backstage.io/docs/features/software-catalog/external-integrations#creating-an-entity-provider) guide on the backstage side to use the plugin as an endpoint.
+
+```diff
+ // packages/backend/src/plugins/catalog.ts
++import { VelaProvider } from '@oamdev/plugin-kubevela-backend';
+
+ export default async function createPlugin(
+   env: PluginEnvironment,
+ ): Promise<Router> {
+   const builder = await CatalogBuilder.create(env);
+
++  const vela = new VelaProvider('production', env.reader, env.config);
++  builder.addEntityProvider(vela);
++  const frequency: number = env.config.getOptionalNumber('vela.frequency') || 60;
++  const timeout: number = env.config.getOptionalNumber('vela.timeout') || 600;
+
+   builder.addProcessor(new ScaffolderEntitiesProcessor());
+   const { processingEngine, router } = await builder.build();
+   await processingEngine.start();
+
+
++  await env.scheduler.scheduleTask({
++    id: 'run_vela_refresh',
++    fn: async () => { await vela.run(); },
++    frequency: { seconds: frequency },
++    timeout: { seconds: timeout },
++  });
+
+
+   return router;
+ }
+```
+
+A pre-configured reference backstage instance: [wonderflow/vela-backstage-demo](https://github.com/wonderflow/vela-backstage-demo).
 
 ![back-stage-arch](./images/backstage-plugin-arch.jpg)
 
@@ -18,7 +51,7 @@ As a result, you just need to follow the [Creating an Entity Provider](https://b
 
 If you want to run it locally with the docker image, you need kubeconfig in your environment.
 
-```shel
+```shell
 docker run -p 8080:8080 --rm -it -v ~/.kube:/root/.kube  oamdev/backstage-plugin-kubevela
 ```
 
@@ -26,7 +59,7 @@ docker run -p 8080:8080 --rm -it -v ~/.kube:/root/.kube  oamdev/backstage-plugin
 
 ```shell
 vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
-vela addon enable 1
+vela addon enable backstage
 ```
 
 If you want to test it locally, you can run the port-forward command and choose `backstage-plugin-vela` component:
