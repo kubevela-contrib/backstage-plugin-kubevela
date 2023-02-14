@@ -248,3 +248,5 @@ You can also specify the backstage system if you want different vela apps in the
 
 - [ ] Add [Well-known Relations between Catalog Entities](https://backstage.io/docs/features/software-catalog/well-known-relations)
 - [ ] Add [Kind API](https://backstage.io/docs/features/software-catalog/descriptor-format#kind-api) to integrate with backstage API
+
+If you want more features, just raise an issue or even file a PR. You can also join our [Slack channel](https://cloud-native.slack.com/archives/C01BLQ3HTJA) to discuss with us.
