@@ -1,12 +1,22 @@
 # backstage-plugin-kubevela
 
-It's a plugin of backstage that can make kubevela application work as backstage services.
+A plugin for backstage that can make kubevela application work as backstage services.
 
-It leverages the [External integrations](https://backstage.io/docs/features/software-catalog/external-integrations) and works as a `Custom Entity Providers`.
+## What is Backstage and KubeVela
 
-This plugin will connect to Kubernetes API and request vela applications, it provides an API endpoint for serving entities for backstage app.
+**Backstage** is an open platform for building developer portals. It unifies your infrastructure tooling, services, and documentation to create a streamlined development environment from end to end.
 
-![back-stage-arch](./images/backstage-plugin-arch.jpg)
+**KubeVela** is a modern software delivery platform that makes deploying and operating applications across today's hybrid, multi-cloud environments easier, faster and more reliable. It is infrastructure agnostic, programmable, yet most importantly, application-centric. It allows you to build powerful software, and deliver them anywhere!
+
+## What's the benefit of combining KubeVela and Backstage
+
+Backstage acts as a "platform of platforms" or marketplace between infra/platform teams and end-users. It sits on top of infrastructure and developer tooling, abstracting infrastructure away. It aims to remove context switching and cognitive overload that drag engineers down.
+
+While KubeVela is more on the infrastructure side. It manages Application deployments and operation across cloud environments or clusters.
+
+We figured out that it would be helpful for existing Backstage users to manage their KubeVela infrastructure. It can connect the infra/platform teams and end-users, without users having to be experts in infrastructure tools.
+
+Instead of manually importing Backstage entities from KubeVela, by using this plugin, KubeVela Applications can be automatically synced to Backstage entities. So users can manage their KubeVela infra directly in Backstage without manual chore.
 
 ## Quick Demo
 
@@ -28,11 +38,13 @@ vela port-forward addon-backstage -n vela-system
 # Choose `local | backstage | backstage:7007' in the list
 ```
 
-Your browser should open the link automatically.
+Your browser should open Backstage automatically. Watch the synced vela Applications.
+
+![image](https://user-images.githubusercontent.com/55270174/222020928-60128267-e053-4ba4-a883-747a02e300c4.png)
 
 Note that the addon is for demo purpose, so the backstage app is strictly serving on `127.0.0.1:7007`.
 
-## Install
+## Install to your own Backstage instance
 
 After you try the demo, if you already have working Backstage instance and want to install this plugin, we will guide you through the process. In case you are confused or misconfigured something, you can always refer to the demo Backstage instance [wonderflow/vela-backstage-demo](https://github.com/wonderflow/vela-backstage-demo) .
 
@@ -219,6 +231,12 @@ Optional step: add VelaUX page to sidebar
 
 ## System Model Integration
 
+It leverages the [External integrations](https://backstage.io/docs/features/software-catalog/external-integrations) and works as a `Custom Entity Providers`.
+
+This plugin will connect to Kubernetes API and request vela applications, it provides an API endpoint for serving entities for backstage app.
+
+![back-stage-arch](./images/backstage-plugin-arch.jpg)
+
 * A vela application will convert to a backstage system.
 * Resources created by vela component, will convert to backstage components.
 * Resources can be marked by annotations to represent more backstage information as the [Well Known Annotations](#Well-Known-Annotations) section described.  
@@ -237,16 +255,17 @@ KubeVela adds some more annotations that can help sync data from vela applicatio
 |    `backstage.oam.dev/title`        |   Title of the app synced to backstage |
 |    `backstage.oam.dev/tags`        |   Tags of the app synced to backstage, split by `,`  |
 
-The annotations and labels of vela application will be automatically injected on syncing, while vela component need a backstage trait for this, check the [example app](./examples/app.yaml) for details.
+Don't forget to checkout the [examples directory](https://github.com/kubevela-contrib/backstage-plugin-kubevela/tree/main/examples), which contains all kinds of usage examples. Common ones are:
+- the annotations and labels of vela application will be automatically injected on syncing, while vela component need a backstage trait for this, check the [app.yaml](./examples/app.yaml) for details.
+- You can configure `backstage-location` as the trait, then it will sync the backstage entity from the location targets. Check out [app-location.yaml](./examples/app-location.yaml) for details.
+- You can also specify the backstage system if you want different vela apps in the same backstage system. Check out [app-with-system.yaml](./examples/app-with-system.yaml) for details.
 
-You can also config `backstage-location` as the trait, then it will sync the backstage entity from the location targets. Check out [app-location.yaml](./examples/app-location.yaml) for details.
 
-You can also specify the backstage system if you want different vela apps in the same backstage system. Check out [app-with-system.yaml](./examples/app-with-system.yaml) for details.
-
-
-## More Integration
+## Future work
 
 - [ ] Add [Well-known Relations between Catalog Entities](https://backstage.io/docs/features/software-catalog/well-known-relations)
 - [ ] Add [Kind API](https://backstage.io/docs/features/software-catalog/descriptor-format#kind-api) to integrate with backstage API
 
-If you want more features, just raise an issue or even file a PR. You can also join our [Slack channel](https://cloud-native.slack.com/archives/C01BLQ3HTJA) to discuss with us.
+## Contact
+
+If you want more features, just raise an issue or even file a PR. If you have any question, you can raise an issue or join our [Slack channel](https://cloud-native.slack.com/archives/C01BLQ3HTJA) to discuss with us.
