@@ -38,10 +38,10 @@ export class VelaProvider implements EntityProvider {
             throw new Error('Not initialized');
         }
 
-        const raw = await this.reader.read(
+        const raw = await this.reader.readUrl(
             this.hostname,
         );
-        const data = JSON.parse(raw.toString());
+        const data = await JSON.parse((await raw.buffer()).toString());
 
         /** [5] **/
         const entities: Entity[] = data;
