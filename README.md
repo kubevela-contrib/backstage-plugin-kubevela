@@ -152,6 +152,41 @@ backend:
 catalog:
   rules:
     - allow: [Domain, System, Component, API, Location, Template, User, Group]
+  providers:
+# Give some configuration to the Vela Entity Provider
+    vela:
+      host: http://backstage-plugin-vela.vela-system:8080 # Change this to the endpoint of the connector
+      schedule: #optional section
+        initialDelay: { seconds: 30 }
+        # frequency is the refresh rate for the Vela API, defaults to 60 seconds
+        frequency: { hours: 30 }
+        # timeout is the timeout limit for the Vela API, defaults to 600 seconds
+        timeout: { minutes: 2 }
+```
+
+Configure Backstage to use the Vela Entity Provider with the new backend
+
+```diff
+ // packages/backend/src/index.ts
++import { VelaProvideriModule } from '@oamdev/plugin-kubevela-backend';
++backend.add(velaProviderModule);
+```
+
+#### configuring backstage with the older backend
+
+```yaml
+# Merge the following lines into your app-config.yaml
+backend:
+  reading:
+    allow:
+      - host: backstage-plugin-vela.vela-system:8080 # Required, change this to the endpoint of the connector
+      - host: raw.githubusercontent.com # Optional
+      - host: kubevela.io # Optional
+      - host: kubevela.net # Optional
+
+catalog:
+  rules:
+    - allow: [Domain, System, Component, API, Location, Template, User, Group]
 
 # Give some configuration to the Vela Entity Provider
 vela:
@@ -195,7 +230,7 @@ Configure Backstage to use the Vela Entity Provider
  }
 ```
 
-Optional step: add VelaUX page to sidebar
+### Optional step: add VelaUX page to sidebar
 
 ```diff
  // packages/app/src/components/Root/Root.tsx
