@@ -1,4 +1,4 @@
-import { UrlReader } from '@backstage/backend-common';
+import { UrlReaderService } from '@backstage/backend-plugin-api';
 import { Entity } from '@backstage/catalog-model';
 import { Config } from '@backstage/config';
 import {
@@ -11,15 +11,15 @@ import {
  */
 export class VelaProvider implements EntityProvider {
     private readonly env: string;
-    private readonly reader: UrlReader;
+    private readonly reader: UrlReaderService;
     private connection?: EntityProviderConnection;
     private hostname: string;
 
     /** [1] **/
-    constructor(env: string, reader: UrlReader, config: Config) {
+    constructor(env: string, reader: UrlReaderService,  config: Config) {
         this.env = env;
         this.reader = reader;
-        this.hostname = config.getOptionalString('vela.host') ?? 'http://localhost/';
+        this.hostname = config.getOptionalString('host') ?? 'http://127.0.0.1';
     }
 
     /** [2] **/
