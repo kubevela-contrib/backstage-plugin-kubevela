@@ -168,7 +168,7 @@ Configure Backstage to use the Vela Entity Provider with the new backend
 
 ```diff
  // packages/backend/src/index.ts
-+import { VelaProvideriModule } from '@oamdev/plugin-kubevela-backend';
++import { velaProviderModule } from '@oamdev/plugin-kubevela-backend';
 +backend.add(velaProviderModule);
 ```
 
