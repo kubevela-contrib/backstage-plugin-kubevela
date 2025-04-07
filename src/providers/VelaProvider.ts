@@ -19,7 +19,7 @@ export class VelaProvider implements EntityProvider {
     constructor(env: string, reader: UrlReaderService,  config: Config) {
         this.env = env;
         this.reader = reader;
-        this.hostname = config.getOptionalString('host') ?? 'http://127.0.0.1';
+        this.hostname = config.getOptionalString('host') ?? 'http://localhost/';
     }
 
     /** [2] **/
