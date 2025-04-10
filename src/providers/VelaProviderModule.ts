@@ -1,10 +1,10 @@
 import {
   coreServices,
   createBackendModule,
-  SchedulerServiceTaskScheduleDefinition,
   readSchedulerServiceTaskScheduleDefinitionFromConfig,
 } from '@backstage/backend-plugin-api';
 import { VelaProvider } from './VelaProvider';
+import { catalogProcessingExtensionPoint } from '@backstage/plugin-catalog-node/alpha';
 
 export const velaProviderModule = createBackendModule({
   pluginId: 'catalog',
@@ -19,9 +19,6 @@ export const velaProviderModule = createBackendModule({
       },
       async init({ catalog, reader, scheduler, rootConfig }) {
         const config = rootConfig.getConfig('catalog.providers.vela')
-        const frequency: number = config.getOptionalNumber('frequency') || 60;
-        const timeout: number = config.getOptionalNumber('timeout') || 600;
-        const hostname:string = config.getConfig('host');
         const schedule = config.has('schedule')
           ? readSchedulerServiceTaskScheduleDefinitionFromConfig(
               config.getConfig('schedule'),
@@ -31,8 +28,14 @@ export const velaProviderModule = createBackendModule({
               timeout: { seconds: 600 },
             };
         const taskRunner = scheduler.createScheduledTaskRunner(schedule);
-        const vela = new VelaProvider('dev', reader, taskRunner, hostname);
+        const vela = new VelaProvider('dev', reader, config);
         catalog.addEntityProvider(vela);
+        taskRunner.run({
+          id: 'vela-provider-refresh',
+          fn: async () => {
+            await vela.run();
+          },
+        });
       },
     });
   },
