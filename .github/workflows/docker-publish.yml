@@ -35,6 +35,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: kubevela-contrib@v2/backstage-plugin-kubevela:latest
+          tags: kubevelacontribv2/backstage-plugin-kubevela:latest
 
           
