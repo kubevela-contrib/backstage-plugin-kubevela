@@ -1,12 +1,17 @@
 {
-    "extends": "@backstage/cli/config/tsconfig.json",
     "include": [
       "src",
     ],
     "exclude": ["node_modules"],
     "compilerOptions": {
-      "outDir": "dist-types",
-      "rootDir": "."
+      "outDir": "dist",
+      "declaration": true,
+      "emitDeclarationOnly": false,
+      "module": "CommonJS",
+      "rootDir": ".",
+      "esModuleInterop": true,
+      "strict": true,
+      "target": "ES2020"
     }
   }
   

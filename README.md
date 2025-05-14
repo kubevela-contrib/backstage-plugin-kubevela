@@ -20,7 +20,7 @@ Instead of manually importing Backstage entities from KubeVela, by using this pl
 
 ## Quick Demo
 
-To see what this plugin does without installing it in your own backstage instance, there is a pre-configured reference backstage instance here [wonderflow/vela-backstage-demo](https://github.com/wonderflow/vela-backstage-demo).
+To see what this plugin does without installing it in your own backstage instance, there is a pre-configured reference backstage instance here [kubevela-contrib/vela-backstage-demo](https://github.com/kubevela-contrib/vela-backstage-demo).
 
 You can follow the link to see how to give it a whirl, but the fastest way is to use the corresponding KubeVela addon, which will deploy this pre-configured instance and all of its dependencies for you. You probably already have KubeVela installed, if not, please follow the [installation guide](https://kubevela.io/docs/install). Once you have KubeVela installed in your Kubernetes cluster, you can run the following command to install the addon:
 
@@ -46,7 +46,7 @@ Note that the addon is for demo purpose, so the backstage app is strictly servin
 
 ## Install to your own Backstage instance
 
-After you try the demo, if you already have working Backstage instance and want to install this plugin, we will guide you through the process. In case you are confused or misconfigured something, you can always refer to the demo Backstage instance [wonderflow/vela-backstage-demo](https://github.com/wonderflow/vela-backstage-demo) .
+After you try the demo, if you already have working Backstage instance and want to install this plugin, we will guide you through the process. In case you are confused or misconfigured something, you can always refer to the demo Backstage instance [kubevela-contrib/vela-backstage-demo](https://github.com/kubevela-contrib/vela-backstage-demo) .
 
 We will accomplish two major tasks:
 - Run vela-backstage connector to serve entities for backstage
@@ -168,7 +168,7 @@ Configure Backstage to use the Vela Entity Provider with the new backend
 
 ```diff
  // packages/backend/src/index.ts
-+import { velaProviderModule } from '@oamdev/plugin-kubevela-backend';
++import { velaProviderModule } from '@kubevela-contrib/plugin-kubevela-backend';
 +backend.add(velaProviderModule);
 ```
 

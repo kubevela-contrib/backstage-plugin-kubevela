@@ -1,1 +1,1 @@
-export { VelaProvider } from './VelaProvider';
+export { velaProviderModule } from './VelaProviderModule';
