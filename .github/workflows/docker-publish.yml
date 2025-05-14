@@ -3,7 +3,7 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - '**'
+      - main
 
 jobs:
   build-and-push:
@@ -28,6 +28,6 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: shivin/backstage-plugin-kubevela:latest
+          tags: kubevelacontribv2/backstage-plugin-kubevela:latest
 
           
