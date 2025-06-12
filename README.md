@@ -26,12 +26,12 @@ You can follow the link to see how to give it a whirl, but the fastest way is to
 
 ```shell
 # Add experimental addon registry
-vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental
+vela addon registry add experimental --type helm --endpoint=https://kubevela.github.io/catalog/experimental
 # Enable backstage demo addon
 vela addon enable backstage
 ```
 
-Wait a while for the addon to be installed, then you can test it locally by forwarding traffic to localhost:
+Wait a while for the addon to be installed, then you can test it locally by forwarding traffic to 127.0.0.1:
 
 ```shell
 vela port-forward addon-backstage -n vela-system
@@ -42,7 +42,7 @@ Your browser should open Backstage automatically. Watch the synced vela Applicat
 
 ![image](https://user-images.githubusercontent.com/55270174/222020928-60128267-e053-4ba4-a883-747a02e300c4.png)
 
-Note that the addon is for demo purpose, so the backstage app is strictly serving on `127.0.0.1:7007`.
+Note that the addon is for demo purpose, so the backstage app is strictly serving on `127.0.0.1:7007`. Accessing it via localhost will not work. Please ensure you use 127.0.0.1 explicitly in the URL.
 
 ## Install to your own Backstage instance
 
@@ -65,21 +65,21 @@ There are several ways to run vela-backstage connector. We will name a few of th
 - If your Backstage instance is running outside the cluster, and you want to run the connector inside the cluster.
   You can only enable vela-backstage connector and expose it using NodePort
   ```shell
-  vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental
+  vela addon registry add experimental --type helm --endpoint=https://kubevela.github.io/catalog/experimental
   vela addon enable backstage pluginOnly=true serviceType=NodePort
   ```
   Remember the endpoint of the NodePort service, you will need it later when configuring Backstage.
 - If your Backstage instance is running inside the cluster, and you want to run the connector inside the cluster.
   You can only enable vela-backstage connector and expose it using ClusterIP
   ```shell
-  vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental
+  vela addon registry add experimental --type helm --endpoint=https://kubevela.github.io/catalog/experimental
   vela addon enable backstage pluginOnly=true
   ```
   Remember the endpoint of the connector, which is `backstage-plugin-vela.vela-system:8080` you will need it later when configuring Backstage.
 - If your Backstage instance is not deployed yet, and you want it and the connector to run inside the cluster.
   You can enable the backstage addon. But instead of using the demo Backstage instance, you will use your own image.
   ```shell
-  vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental
+  vela addon registry add experimental --type helm --endpoint=https://kubevela.github.io/catalog/experimental
   vela addon enable backstage image="<my-backstage-image>"
   ```
   In this way, you will use `backstage-plugin-vela.vela-system:8080` when configuring Backstage to connect to the connector.
@@ -134,7 +134,7 @@ No matter how you run the connector, now you should have a way to access it. We 
 
 ### Configure your Backstage instance
 
-If you haven't already created your own Backstage instance, you can create it by `npx @backstage/create-app`. In case you also want to build a container image, you can refer to the demo Backstage instance [wonderflow/vela-backstage-demo](https://github.com/wonderflow/vela-backstage-demo) for a Dockerfile.
+If you haven't already created your own Backstage instance, you can create it by `npx @backstage/create-app`. In case you also want to build a container image, you can refer to the demo Backstage instance [kubevela-contrib/vela-backstage-demo](https://github.com/kubevela-contrib/vela-backstage-demo) for a Dockerfile.
 
 
 First of all, we need to access the connector from our Backstage instance. By default, you cannot access arbitrary services. You need to configure the `app-config.yaml` to allow it. You can find the `app-config.yaml` in the root directory of your Backstage instance. **Merge** the following lines into your `app-config.yaml` to allow the access to the connector and configure vela services:
