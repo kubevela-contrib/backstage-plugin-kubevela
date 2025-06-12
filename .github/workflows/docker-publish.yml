@@ -28,6 +28,6 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: oamdev/backstage-plugin-kubevela:v0.1
+          tags: oamdev/backstage-plugin-kubevela:v0.2
 
           
